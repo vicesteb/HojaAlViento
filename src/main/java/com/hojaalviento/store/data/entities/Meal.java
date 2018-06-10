@@ -1,8 +1,6 @@
 package com.hojaalviento.store.data.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.util.Date;
+import javax.persistence.*;
 
 @Entity
 public class Meal
@@ -34,6 +32,9 @@ public class Meal
         this.name = name;
     }
 
+    @Access(AccessType.PROPERTY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name="priceRow")
     public PriceRow getPriceRow()
     {
         return priceRow;
