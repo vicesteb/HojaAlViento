@@ -15,6 +15,11 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
+bootJar {
+	baseName = 'hoja-al-viento-store'
+	version =  '0.1.0'
+}
+
 group = 'com.hojaalviento'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
@@ -26,6 +31,7 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile("com.h2database:h2")
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
