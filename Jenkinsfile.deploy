@@ -1,0 +1,39 @@
+#!/usr/bin/env groovy
+podTemplate(
+    label: 'deploy',
+    containers: [
+      containerTemplate(name: 'jnlp', image: 'jenkins/jnlp-slave:alpine', args: '${computer.jnlpmac} ${computer.name}'),
+      containerTemplate(name: 'base', image: 'registry.gitlab.com/playgali/galik8s/base:latest', ttyEnabled: true, command: '/bin/sh', workingDir: '/home/jenkins', alwaysPullImage: true)
+    ],
+    volumes: [
+      hostPathVolume(mountPath: '/etc/localtime', hostPath: '/etc/localtime'),
+      hostPathVolume(mountPath: '/etc/timezone', hostPath: '/etc/timezone'),
+      hostPathVolume(mountPath: '/usr/bin/docker', hostPath: '/usr/bin/docker'),
+      hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
+    ],
+    imagePullSecrets: [ 'gitlab' ]
+)
+{ try {} catch(err) {} finally { node('deploy') {
+try {
+  date = new Date().format('yyyy-MM-dd')
+  stage ('checkout') { container('base') {
+    dir('hojaalviento') {
+      git branch: "master", credentialsId: 'gihub', url: 'https://github.com/vicesteb/HojaAlViento.git'
+    }
+  }}
+  stage ('deploy hojaalviento') { container('base') {
+    dir('hojaalviento/charts') {
+
+          sh """
+            kubectl version
+            helm upgrade --force --recreate-pods --wait --install --namespace galiservices hojaalviento hojaalviento
+            helm list
+          """
+    }
+  }}
+  currentBuild.result =  'SUCCESS'
+}
+catch (any) {
+  currentBuild.result = 'FAILURE'
+  throw any //rethrow exception to prevent the build from proceeding
+}}}}
