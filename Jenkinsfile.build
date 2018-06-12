@@ -48,6 +48,9 @@ try {
       }
     }
   }}
+  stage('Triggering deployment') {
+                 build job: 'deploy-hojaalviento', propagate: true
+  }
   currentBuild.result =  'SUCCESS'
 }
 catch (any) {
