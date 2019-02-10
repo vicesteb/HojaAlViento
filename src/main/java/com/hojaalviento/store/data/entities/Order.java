@@ -1,14 +1,10 @@
 package com.hojaalviento.store.data.entities;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@Entity
 public class Order
 {
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
     private Customer customer;
@@ -27,9 +23,6 @@ public class Order
         this.id = id;
     }
 
-    @Access(AccessType.PROPERTY)
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="customer")
     public Customer getCustomer() {
         return customer;
     }
@@ -38,9 +31,6 @@ public class Order
         this.customer = customer;
     }
 
-    @Access(AccessType.PROPERTY)
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="meals")
     public List<Meal> getMeals() {
         return meals;
     }

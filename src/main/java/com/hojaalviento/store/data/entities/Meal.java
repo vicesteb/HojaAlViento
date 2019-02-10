@@ -1,16 +1,10 @@
 package com.hojaalviento.store.data.entities;
 
-import javax.persistence.*;
-
-@Entity
 public class Meal
 {
-    @Id
     private String code;
 
     private String name;
-
-    private PriceRow priceRow;
 
     public String getCode()
     {
@@ -32,16 +26,4 @@ public class Meal
         this.name = name;
     }
 
-    @Access(AccessType.PROPERTY)
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="priceRow")
-    public PriceRow getPriceRow()
-    {
-        return priceRow;
-    }
-
-    public void setPriceRow(PriceRow priceRow)
-    {
-        this.priceRow = priceRow;
-    }
 }
